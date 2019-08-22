@@ -20,7 +20,8 @@ library
       src
   ghc-options: -Wall
   build-depends:
-      base ==4.*
+      base == 4.*,
+      array == 0.5.*
   exposed-modules:
       SmallestFreeNumber
   other-modules:
@@ -35,6 +36,7 @@ test-suite tests
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   build-depends:       base,
+                       array,
                        hspec                >= 1.8,
                        hspec-discover       >= 2,
                        learn-haskell
