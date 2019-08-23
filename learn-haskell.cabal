@@ -37,6 +37,7 @@ test-suite tests
   main-is: Spec.hs
   build-depends:       base,
                        array,
+                       QuickCheck           >= 2.13,
                        hspec                >= 1.8,
                        hspec-discover       >= 2,
                        learn-haskell

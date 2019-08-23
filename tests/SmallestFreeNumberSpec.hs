@@ -1,8 +1,18 @@
 module SmallestFreeNumberSpec (spec) where
 
 import Test.Hspec
+import Test.QuickCheck
 import SmallestFreeNumber
 import Data.Array
+
+mysort :: [Nat] -> Maybe [Nat]
+mysort [] = Just []
+mysort (p:xs) = if any (< 0) (p:xs) 
+                then Nothing
+                else Just $ as ++ [p] ++ bs
+						          where
+						          	as = filter (<= p) xs
+						          	bs = filter (> p) xs
 
 spec :: Spec
 spec =
@@ -24,3 +34,11 @@ spec =
         checklist [1] `shouldBe` listArray (0, 1) [False, True]
       it "returns correct array for longer input" $
         checklist [1, 3, 5] `shouldBe` listArray (0, 3) [False, True, False, True, False]
+
+    describe "read" $
+	  	it "is inverse to show" $ property $
+	  		\x -> (read . show) x == (x :: Int)
+
+    describe "countsort" $
+      it "is same as 'sort'" $ property $
+        \x -> countsort x == mysort x

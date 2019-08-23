@@ -5,6 +5,8 @@
 module SmallestFreeNumber where
 
 import Data.Array
+import Numeric.Natural
+import Control.Exception
 
 type Nat = Int
 
@@ -16,6 +18,16 @@ minfree1 xs = head ([0..] \\ xs)
 (\\) :: Eq a => [a] -> [a] -> [a]
 us \\ vs = filter (`notElem` vs) us
 
-checklist :: [Nat] -> Array Nat Bool
-checklist xs = accumArray (||) False (0, n) (zip (filter (<= n) xs) (repeat True))
+checklist :: [Nat] -> Array Int Bool
+checklist xs = accumArray (||) False (0, n) (zip (filter (<= n) (map fromIntegral xs)) (repeat True))
               where n = length xs
+
+countlist :: [Nat] -> Array Nat Nat
+countlist xs = accumArray (+) 0 (0, n) (zip (map fromIntegral xs) (repeat 1))
+              where n = foldl max 0 xs -- 0 is identity element for max on natural numbers
+
+countsort :: [Nat] -> Maybe [Nat]
+countsort [] = Just []
+countsort xs = if any (< 0) xs 
+               then Nothing
+               else Just $ concat [replicate (fromIntegral k) x | (x, k) <- assocs (countlist xs)]
