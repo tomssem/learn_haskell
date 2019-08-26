@@ -1,29 +1,36 @@
 module SmallestFreeNumberSpec (spec) where
 
+import Data.Array
+import Data.Maybe
+import SmallestFreeNumber
 import Test.Hspec
 import Test.QuickCheck
-import SmallestFreeNumber
-import Data.Array
 
 mysort :: [Nat] -> Maybe [Nat]
 mysort [] = Just []
-mysort (p:xs) = if any (< 0) (p:xs) 
+mysort (p:xs) = if not $ all (>= 0) (p:xs) 
                 then Nothing
                 else Just $ as ++ [p] ++ bs
-						          where
-						          	as = filter (<= p) xs
-						          	bs = filter (> p) xs
+  					          where
+						          	as = fromJust $ mysort $ filter (<= p) xs
+						          	bs = fromJust $ mysort $ filter (> p) xs
 
 spec :: Spec
 spec =
   describe "SmallestFreeNumber" $ do
     describe "minfree1" $ do
       it "returns 0 when given empty list" $
-        minfree1 [] `shouldBe` 0
+        minfree1 [] `shouldBe` Just 0
       it "returns 1 when given a list containined only 1" $
-        minfree1 [0] `shouldBe` 1
+        minfree1 [0] `shouldBe` Just 1
       it "returns 0 when given a list containing any list of numbers greater than 1" $
-        minfree1 [1] `shouldBe` 0
+        minfree1 [1] `shouldBe` Just 0
+      it "returns 0 when list contains negative number" $
+        minfree1 [-1] `shouldBe` Nothing
+
+    describe "minfreeArray" $
+      it "is same as minfree1" $ property $
+        \x -> minfreeArray x == minfree1 x
 
     describe "countlist" $ do
       it "Returns array length 1 consisting of False when given empty array" $
@@ -40,5 +47,5 @@ spec =
 	  		\x -> (read . show) x == (x :: Int)
 
     describe "countsort" $
-      it "is same as 'sort'" $ property $
+      it "is same as 'mysort'" $ property $
         \x -> countsort x == mysort x
