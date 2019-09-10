@@ -5,6 +5,7 @@
 module SmallestFreeNumber where
 
 import Data.Array
+import Data.Array.ST
 
 type Nat = Int
 
@@ -36,3 +37,6 @@ minfreeArray xs = checkIfAllPos xs (\x -> length $ takeWhile id (elems $ checkli
 countsort :: [Nat] -> Maybe [Nat]
 countsort [] = Just []
 countsort xs = checkIfAllPos xs (\z -> concat [replicate (fromIntegral k) x | (x, k) <- assocs (countlist z)])
+
+checklist_prosaic xs = runSTArray $ do
+                                      a <- newArray (0, n) False
