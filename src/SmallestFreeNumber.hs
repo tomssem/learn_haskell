@@ -6,6 +6,7 @@ module SmallestFreeNumber where
 
 import Data.Array
 import Data.Array.ST
+import Data.List
 
 type Nat = Int
 
@@ -19,9 +20,6 @@ checkIfAllPos xs f = if not $ all (>= 0) xs
 
 minfree1 :: [Nat] -> Maybe Nat
 minfree1 xs = checkIfAllPos xs (\x -> head ([0..] \\ x))
-
-(\\) :: Eq a => [a] -> [a] -> [a]
-us \\ vs = filter (`notElem` vs) us
 
 checklist :: [Nat] -> Array Int Bool
 checklist xs = accumArray (||) False (0, n) (zip (filter (<= n) (map fromIntegral xs)) (repeat True))
@@ -38,5 +36,19 @@ countsort :: [Nat] -> Maybe [Nat]
 countsort [] = Just []
 countsort xs = checkIfAllPos xs (\z -> concat [replicate (fromIntegral k) x | (x, k) <- assocs (countlist z)])
 
-checklist_prosaic xs = runSTArray $ do
-                                      a <- newArray (0, n) False
+checklistProsaic xs = runSTArray $ do
+                                    a <- newArray (0, n) False
+                                    sequence_ [writeArray a x True | x <- xs, x <= n]
+                                    return a
+                            where n = length xs
+
+minfreeDivConq :: [Nat] -> Maybe Nat
+minfreeDivConq xs = checkIfAllPos xs (\x -> minfrom 0 (length x, x))
+
+minfrom :: Nat -> (Int, [Nat]) -> Nat
+minfrom a (n, xs) | null xs            = a
+                  | m == b - a         = minfrom b (n - m, vs)
+                  | otherwise          = minfrom a (m, us)
+                    where (us, vs) = partition (< b) xs
+                          b        = a + 1 + n `div` 2
+                          m        = length us

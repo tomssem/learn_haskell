@@ -32,6 +32,10 @@ spec =
       it "is same as minfree1" $ property $
         \x -> minfreeArray x == minfree1 x
 
+    describe "minfreeDivConq" $
+      it "is same as minfree1" $ property $
+        \x -> minfreeDivConq x == minfree1 x
+
     describe "countlist" $ do
       it "Returns array length 1 consisting of False when given empty array" $
         checklist [] `shouldBe` listArray (0, 0) [False]
