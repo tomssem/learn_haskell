@@ -24,6 +24,7 @@ library
       array == 0.5.*
   exposed-modules:
       SmallestFreeNumber
+      Surpassing
   other-modules:
       Paths_learn_haskell
   default-language: Haskell2010
