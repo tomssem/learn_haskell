@@ -29,3 +29,9 @@ spec =
     describe "myTails" $
       it "is same as tails with empty list filtered out" $ property $
         \x -> (myTails x) == (filter (not . null) $ tails (x :: [Int]))
+    describe "mscTable" $
+      it "is same as msc" $ property $
+        \x -> msc x == (mscTable (x :: [Int]))
+    describe "join" $
+      it "is same as adding lists and then creating table" $ property $
+        \x y -> table ((x :: [Int]) ++ (y :: [Int])) == join (table x) (table y)
