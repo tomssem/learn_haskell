@@ -34,7 +34,7 @@ spec =
         \x -> msc x == (mscTable (x :: [Int]))
     describe "myJoin" $
       it "is same as adding lists and then creating table" $ property $
-        \x y -> table ((x :: [Int]) ++ (y :: [Int])) == sort (myJoin (table x) (table y))
+        \x y -> table ((x :: [Int]) ++ (y :: [Int])) == (sort (myJoin (length y) (table x) (table y)))
     describe "merge" $ 
       it "is same as concatenating lists and then sorting them" $ property $
         \x y -> merge (sort x) (sort y) == (sort $ (++) ((sort x) :: [Int]) ((sort y) :: [Int]))
