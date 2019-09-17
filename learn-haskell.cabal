@@ -25,6 +25,7 @@ library
   exposed-modules:
       SmallestFreeNumber
       Surpassing
+      SaddleBack
   other-modules:
       Paths_learn_haskell
   default-language: Haskell2010
