@@ -1,8 +1,11 @@
 module SaddleBackSpec (spec) where
 
-import SaddleBack
+import Data.List
+
 import Test.Hspec
 import Test.QuickCheck
+
+import SaddleBack
 
 almostMultiplication :: Int -> Int -> Int
 almostMultiplication x y = (x + 1) * (y + 1)
